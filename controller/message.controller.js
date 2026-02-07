@@ -1,5 +1,4 @@
 import { getReceiverSocketId,io } from "../index.js";
-import cloudinary from "../lib/cloudinary.js";
 import Message from "../modal/message.model.js";
 import User from "../modal/user.model.js";
 
