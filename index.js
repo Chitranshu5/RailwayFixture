@@ -50,6 +50,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors"; // Add this import
 import userRoutes from "./routes/user.routes.js";
 import { connectDB } from "./modal/db.js";
+import messageRoutes from './routes/message.route.js'
 
 dotenv.config();
 
@@ -118,6 +119,8 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/users", userRoutes);
+app.use("/api/messages", messageRoutes); // ✅ Add this
+
 
 app.get("/food", (req, res) => {
   res.json([
