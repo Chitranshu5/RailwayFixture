@@ -1,7 +1,6 @@
-import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import { generateToken } from "../lib/utils.js";
-import cloudinary from "../lib/cloudinary.js";
+import User from "../modal/user.model.js";
+import { generateToken } from "../utils/uti.js";
 
 
 
@@ -52,6 +51,8 @@ export const signup = async (req, res) => {
   }
 };
 
+
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -83,6 +84,8 @@ export const login = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
 
 export const logout = async (req, res) => {
   try {

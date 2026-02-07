@@ -1,23 +1,23 @@
 import express from "express";
 import dotenv from "dotenv";
 import { createServer } from "http";
+import { connectDB } from "./modal/db.js";
+import userRoutes from "./routes/user.routes.js"
+import cookieParser from "cookie-parser"; // Add this
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 const httpServer = createServer(app);
+app.use(express.json());
+app.use(cookieParser()); // Add this to parse cookies
 
-app.get("/food", (req, res) => {
-  res.json([
-    { id: 1, name: "Pizza", category: "Fast Food", price: 299 },
-    { id: 2, name: "Burger", category: "Fast Food", price: 199 },
-    { id: 3, name: "Biryani", category: "Indian", price: 249 },
-    { id: 4, name: "Pasta", category: "Italian", price: 279 },
-    { id: 5, name: "Dosa", category: "South Indian", price: 149 },
-  ]);
-});
+
+// Routes
+app.use("/api/users", userRoutes); // Add this route
+
+
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -28,8 +28,16 @@ app.get("/", (req, res) => {
   });
 });
 
-httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Connect to database and start server
+connectDB()
+  .then(() => {
+    httpServer.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to connect to database:", error);
+    process.exit(1);
+  });
 
 export { httpServer, app };
