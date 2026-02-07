@@ -20,19 +20,57 @@ export const getMessages = async (req, res) => {
     const senderId = req.user._id;
     const { id: receiverId } = req.params;
 
-    const messages = await Message.find({
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+    const skip = (page - 1) * limit;
+
+  
+
+    // Query for messages between two users
+    const query = {
       $or: [
         { senderId: senderId, receiverId: receiverId },
         { senderId: receiverId, receiverId: senderId },
       ],
-    });
+    };
 
-    res.status(200).json(messages);
+    const totalMessages = await Message.countDocuments(query);
+    // console.log("Total messages in DB:", totalMessages);
+
+    // Fetch messages with pagination
+    // Sort by createdAt descending (newest first) for pagination
+    // Then reverse to show chronologically (oldest to newest)
+    const messages = await Message.find(query)
+      .sort({ createdAt: -1 }) // Newest first for correct pagination
+      .skip(skip) // Skip already loaded pages
+      .limit(limit) // Limit to 20 messages per page
+      .lean(); // Better performance
+
+
+    // Reverse to display oldest to newest in UI
+    const messagesInOrder = messages.reverse();
+
+    // Pagination metadata
+    const pagination = {
+      currentPage: page,
+      totalPages: Math.ceil(totalMessages / limit),
+      totalMessages,
+      hasMore: skip + messages.length < totalMessages,
+    };
+
+
+
+    // Return new format with pagination
+    res.status(200).json({
+      messages: messagesInOrder,
+      pagination,
+    });
   } catch (error) {
-    console.error("Error in get messages: ", error.message);
+    console.error("Error in get messages:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 
 

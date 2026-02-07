@@ -105,7 +105,7 @@ io.on("connection", (socket) => {
 app.use(cors({
   origin: [
     "http://localhost:5173", // Local Vite dev server
-    "http://localhost:5174", // Backup port
+    "", // Backup port
     process.env.FRONTEND_URL // Your deployed frontend URL
   ].filter(Boolean),
   credentials: true, // Allow cookies
