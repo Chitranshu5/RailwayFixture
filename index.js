@@ -81,7 +81,7 @@ export function getReceiverSocketId(userId) {
 
 // Socket.IO connection handler
 io.on("connection", (socket) => {
-  console.log("✅ User connected:", socket.id);
+  // console.log("✅ User connected:", socket.id);
 
   const userId = socket.handshake.query.userId;
   if (userId && userId !== "undefined") {
@@ -92,7 +92,7 @@ io.on("connection", (socket) => {
 
   // Handle disconnect
   socket.on("disconnect", () => {
-    console.log("❌ User disconnected:", socket.id);
+    // console.log("❌ User disconnected:", socket.id);
     if (userId) {
       delete userSocketMap[userId];
       // Emit updated online users list
@@ -122,15 +122,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes); // ✅ Add this
 
 
-app.get("/food", (req, res) => {
-  res.json([
-    { id: 1, name: "Pizza", category: "Fast Food", price: 299 },
-    { id: 2, name: "Burger", category: "Fast Food", price: 199 },
-    { id: 3, name: "Biryani", category: "Indian", price: 249 },
-    { id: 4, name: "Pasta", category: "Italian", price: 279 },
-    { id: 5, name: "Dosa", category: "South Indian", price: 149 },
-  ]);
-});
 
 app.get("/", (req, res) => {
   res.status(200).json({

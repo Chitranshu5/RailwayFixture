@@ -1,4 +1,4 @@
-import { getReceiverSocketId,io } from "../index.js";
+import { getReceiverSocketId, io } from "../index.js";
 import Message from "../modal/message.model.js";
 import User from "../modal/user.model.js";
 
@@ -24,8 +24,6 @@ export const getMessages = async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
 
-  
-
     // Query for messages between two users
     const query = {
       $or: [
@@ -46,7 +44,6 @@ export const getMessages = async (req, res) => {
       .limit(limit) // Limit to 20 messages per page
       .lean(); // Better performance
 
-
     // Reverse to display oldest to newest in UI
     const messagesInOrder = messages.reverse();
 
@@ -58,8 +55,6 @@ export const getMessages = async (req, res) => {
       hasMore: skip + messages.length < totalMessages,
     };
 
-
-
     // Return new format with pagination
     res.status(200).json({
       messages: messagesInOrder,
@@ -70,9 +65,6 @@ export const getMessages = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
-
-
 
 export const sendMessage = async (req, res) => {
   try {
