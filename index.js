@@ -63,7 +63,8 @@ const io = new Server(httpServer, {
   cors: {
     origin: [
       "http://localhost:5173", // Local Vite dev server
-      "http://localhost:5174", // Backup port
+      "http://localhost:5174",
+      "https://tangerine-sawine-40ba33.netlify.app",
       process.env.FRONTEND_URL // Your deployed frontend URL from Railway/Netlify/Vercel
     ].filter(Boolean), // Remove undefined values
     credentials: true,
@@ -105,7 +106,7 @@ io.on("connection", (socket) => {
 app.use(cors({
   origin: [
     "http://localhost:5173", // Local Vite dev server
-    "", // Backup port
+   "https://tangerine-sawine-40ba33.netlify.app",
     process.env.FRONTEND_URL // Your deployed frontend URL
   ].filter(Boolean),
   credentials: true, // Allow cookies
